@@ -253,11 +253,6 @@ resource "null_resource" "download_vcenter_iso" {
     destination = "$HOME/bootstrap/download_vcenter.sh"
   }
 
-  provisioner "file" {
-    content     = data.template_file.download_vcenter.rendered
-    destination = "$HOME/bootstrap/download_vcenter.sh"
-  }
-
   provisioner "remote-exec" {
     inline = ["bash $HOME/bootstrap/download_vcenter.sh"]
   }
@@ -457,6 +452,7 @@ resource "null_resource" "vsan_claim" {
     inline = [
       "echo 'vCenter Deployed... Waiting 60 seconds before configuring vSan...'",
       "sleep 60",
+      "python3 -m pip install defusedxml",
       "python3 $HOME/bootstrap/vsan_claim.py"
     ]
   }
